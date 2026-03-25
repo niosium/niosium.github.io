@@ -1,6 +1,387 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile: Tanvir Hasan</title>
+  <link rel="icon" type="image/x-icon" href="webicon.ico"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    @font-face {
+      font-family: 'Geist';
+      src: url('Geist.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e14;
+      --card-bg: #16161f;
+      --card-border: rgba(255,255,255,0.08);
+      --accent: #FFDB58;
+      --accent2: #7eb8c9;
+      --label: #8a8aaa;
+      --value: #e8e8f0;
+      --divider: rgba(255,255,255,0.07);
+      --shadow: none;
+    }
+
+    html {
+      overflow: hidden;
+      height: 100%;
+    }
+    body {
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      padding: 32px 24px;
+    }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar { display: none; }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 26px;
+      border: 3px solid rgba(255,255,255,0.85);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: fadeUp 0.6s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-stripe {
+      height: 12px;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .card-body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(200,169,110,0.2) transparent;
+    }
+    .card-body::-webkit-scrollbar { width: 3px; }
+    .card-body::-webkit-scrollbar-track { background: transparent; }
+    .card-body::-webkit-scrollbar-thumb { background: rgba(200,169,110,0.25); border-radius: 3px; }
+
+    .avatar {
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #2a2a38;
+      position: relative;
+    }
+    .avatar img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .fields-list { display: flex; flex-direction: column; }
+
+    .field {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 1px solid var(--divider);
+      animation: fieldIn 0.4s ease both;
+    }
+    .field:last-child { border-bottom: none; }
+    @keyframes fieldIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .field-label {
+      font-weight: 500;
+      color: var(--label);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bullet {
+      color: var(--label);
+      flex-shrink: 0;
+      opacity: 0.45;
+    }
+    .field-value {
+      color: var(--value);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .field-value.gold { color: var(--accent); }
+    .field-value.blue { color: var(--accent2); }
+
+    .divider {
+      height: 1px;
+      background: var(--divider);
+      flex-shrink: 0;
+    }
+
+    .qr-footer {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      flex-shrink: 0;
+    }
+    .qr-box {
+      flex-shrink: 0;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .qr-box img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .qr-text { flex: 1; min-width: 0; }
+    .qr-scan-label {
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--label);
+    }
+
+    .qr-heading {
+      font-family: 'Geist', 'DM Sans', sans-serif;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .qr-sub {
+      color: var(--label);
+      line-height: 1.5;
+    }
+
+    .profile-name {
+      font-family: 'Geist', 'DM Sans', sans-serif;
+      font-weight: 700;
+      color: var(--value);
+      letter-spacing: 0.01em;
+    }
+
+    .profile-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      color: var(--accent);
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    @media (orientation: landscape), (min-width: 700px) {
+
+      body { overflow: hidden; }
+
+      .card {
+        width: min(820px, calc(100vw - 48px));
+        height: min(520px, calc(100vh - 64px));
+      }
+
+      .card-body {
+        padding: 28px 34px 28px 30px;
+        gap: 20px;
+      }
+
+      .header-row {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        flex-shrink: 0;
+      }
+      .avatar { width: 88px; height: 88px; }
+
+      .header-text { display: flex; flex-direction: column; gap: 5px; }
+      .profile-name  { font-size: clamp(18px, 2.4vw, 26px); }
+      .profile-title { font-size: clamp(11px, 1.1vw, 13px); }
+
+      .fields-list { gap: 0; }
+      .field { padding: 10px 0; }
+      .field-label { font-size: clamp(13px, 1.3vw, 15px); min-width: 130px; }
+      .bullet       { font-size: clamp(13px, 1.3vw, 15px); margin: 0 12px; }
+      .field-value  { font-size: clamp(13px, 1.4vw, 16px); }
+
+      .qr-footer    { gap: 18px; padding: 14px 18px; }
+      .qr-box       { width: 70px; height: 70px; }
+      .qr-scan-label{ font-size: 11px; margin-bottom: 3px; }
+      .qr-heading   { font-size: 15px; margin-bottom: 3px; }
+      .qr-sub       { font-size: 12px; }
+
+      .portrait-banner { display: none; }
+    }
+
+    @media (orientation: portrait) and (max-width: 699px) {
+
+      html, body {
+        overflow: hidden;
+        height: 100%;
+      }
+
+      body {
+        align-items: center;
+        justify-content: center;
+        padding: 20px 16px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+        height: calc(100vh - 40px);
+        margin: 0 auto;
+        border-radius: 22px;
+      }
+
+      .card-body {
+        padding: 24px 22px;
+        gap: 0;
+        overflow-y: auto;
+      }
+
+      .header-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding-bottom: 20px;
+        flex-shrink: 0;
+      }
+
+      .avatar { width: 100px; height: 100px; }
+
+      .header-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        text-align: center;
+      }
+      .profile-name  { font-size: 24px; }
+      .profile-title { font-size: 11px; }
+
+      .portrait-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 0 18px;
+        flex-shrink: 0;
+      }
+      .banner-dot {
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0.5;
+      }
+      .banner-dot.mid { opacity: 1; width: 7px; height: 7px; }
+
+      .fields-list { gap: 0; margin-bottom: 22px; }
+      .field { flex-direction: row; align-items: baseline; padding: 13px 0; }
+      .field-label { font-size: 14px; min-width: 110px; }
+      .bullet       { font-size: 14px; margin: 0 10px; }
+      .field-value  { font-size: 15px; }
+
+      .qr-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 14px;
+        padding: 18px 16px;
+        margin-top: 4px;
+      }
+      .qr-box        { width: 100px; height: 100px; }
+      .qr-scan-label { font-size: 11px; margin-bottom: 4px; }
+      .qr-heading    { font-size: 16px; margin-bottom: 4px; }
+      .qr-sub        { font-size: 12px; }
+    }
+  </style>
+</head>
 <body>
-<h2 style="font-family: Arial, sans-serif;">Hello Iam Tanvir, trying to decode 5th code of wifies/mclive (I'am stuck)</h2>
-<h2 style="font-family: Arial, sans-serif;">-Tanvir {24/03/2026}</h2>
+
+<div class="card">
+  <div class="card-stripe"></div>
+
+  <div class="card-body">
+
+    <div class="header-row">
+      <div class="avatar">
+        <img src="pfp.jpg" alt="Profile Picture"/>
+      </div>
+      <div class="header-text">
+        <div class="profile-name">Tanvir Hasan</div>
+        <div class="profile-title">Senior Minecraft Player</div>
+      </div>
+    </div>
+
+    <div class="portrait-banner">
+      <div class="banner-dot"></div>
+      <div class="banner-dot mid"></div>
+      <div class="banner-dot"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fields-list">
+
+      <div class="field" style="animation-delay:.05s">
+        <span class="field-label">Email</span>
+        <span class="bullet">•</span>
+        <span class="field-value gold"><a href="mailto:niosium@gmail.com" style="color:inherit;text-decoration:none;">niosium@gmail.com</a></span>
+      </div>
+
+      <div class="field" style="animation-delay:.13s">
+        <span class="field-label">Organization</span>
+        <span class="bullet">•</span>
+        <span class="field-value">Niosium INC.</span>
+      </div>
+
+      <div class="field" style="animation-delay:.17s">
+        <span class="field-label">Skills</span>
+        <span class="bullet">•</span>
+        <span class="field-value">Blender · Premiere Pro · After Effects · Minecraft</span>
+      </div>
+
+      <div class="field" style="animation-delay:.21s">
+        <span class="field-label">Twitter / X</span>
+        <span class="bullet">•</span>
+        <span class="field-value">@niosium</span>
+      </div>
+
+    </div>
+
+    <div class="qr-footer">
+      <div class="qr-box">
+        <img src="qr.png" alt="QR Code"/>
+      </div>
+      <div class="qr-scan-label">Scan to Connect</div>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>
